@@ -30,7 +30,6 @@ object D2WithRDD {
       PersonUtils.fromJson(sc.textFile(Constants.HDFS_URI+Constants.FILE_PATH).first)
     )
 
-
     //2.1
     val currentYear =Calendar.getInstance().get(Calendar.YEAR)
     val modList = persons.map(p => (p, currentYear - p.age))

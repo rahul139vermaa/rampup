@@ -31,6 +31,7 @@ object HDFSFileService{
       val output = fs.create(new Path(pathString),overrideIfExist)
       new BufferedOutputStream(output)
     }
+
     os.write(content.getBytes())
     os.close
     //fs.close

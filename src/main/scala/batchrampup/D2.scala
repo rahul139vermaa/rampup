@@ -7,7 +7,7 @@ import org.apache.spark.{SparkContext, SparkConf}
   */
 object D2 {
   val sc ={
-    val conf = new SparkConf().setAppName("PersonStore").setMaster("local[1]")
+    val conf = new SparkConf()
     new SparkContext(conf)
   }
 
