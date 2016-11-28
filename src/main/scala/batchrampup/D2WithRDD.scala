@@ -62,6 +62,7 @@ object D2WithRDD {
     val avg = sum / modList.count
     println(avg)
 
+
     //2.4
     /*
     Obj2.4 Group people with their name's initial character, and calculate the average age for each initial.

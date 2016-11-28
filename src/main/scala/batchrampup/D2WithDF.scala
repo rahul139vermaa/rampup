@@ -1,5 +1,6 @@
 package batchrampup
 
+import java.io.BufferedReader
 import java.util.Calendar
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.functions._
@@ -42,6 +43,7 @@ object D2WithDF {
     val resAvg = modDF.select(avg(modDF("age")))
     resAvg.show()
 
+
     //2.3
     /*
     Obj2.3 Find sum of  age of Person using 'age' class member.
@@ -53,7 +55,6 @@ object D2WithDF {
 
     val resSum = modDF.select(sum(modDF("age")) )
     resSum.show()
-
     //2.4
     /*
     Obj2.4 Group people with their name's initial character, and calculate the average age for each initial.
