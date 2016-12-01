@@ -6,5 +6,7 @@ package yarnapp
 object HelloWorld {
   def main(args: Array[String]) {
     println("*********helloworld*********")
+
+
   }
 }

@@ -28,13 +28,28 @@ object Client {
     client.init(conf)
     client.start()
 
-    val app = client.createApplication() //???
 
+    /*Connect to ResourceManager and request for a new application ID:
+The client connects to the ResourceManager service and requests a new
+application. The response of the request (that is, YarnClientApplication
+– GetNewApplicationResponse) contains a new application ID and the
+minimum and maximum resource capability of the cluster.*/
+    val app = client.createApplication()
+
+
+    //app.getNewApplicationResponse.getMaximumResourceCapability //
+
+
+
+/*Define ContainerLaunchContext for Application Master: The first container
+for an application is the ApplicationMaster's container. The client defines
+a ContainerLaunchContext, which contains information to start the
+ApplicationMaster service*/
     val amContainer = Records.newRecord(classOf[ContainerLaunchContext])
     //application master is a just java program with given commands
     amContainer.setCommands(List(
       "$JAVA_HOME/bin/java" +
-        " -Xmx256M" +
+        " -Xmx256M -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005" +
         " yarnapp.ApplicationMaster" +
         "  " + jarPath + "   " + numberOfInstances + " " +
         " 1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stdout" +
@@ -42,7 +57,9 @@ object Client {
     ).asJava)
 
 
-    //add the jar which contains the Application master code to classpath
+    /*Set up jar for ApplicationMaster: The NodeManager should be
+able to locate the ApplicationMaster jar file. The jar file is placed
+on HDFS and is accessed by NodeManager as a LocalResource */
     val appMasterJar = Records.newRecord(classOf[LocalResource])
     setUpLocalResource(new Path(jarPath), appMasterJar)
     amContainer.setLocalResources(Collections.singletonMap("helloworld.jar", appMasterJar))
@@ -60,13 +77,20 @@ object Client {
 
     val appContext = app.getApplicationSubmissionContext
     appContext.setApplicationName("Hello world yarn App")
-    appContext.setAMContainerSpec(amContainer)
+    appContext.setAMContainerSpec(amContainer) //CLC
     appContext.setResource(resource)
     appContext.setQueue("default")
 
     val appId = appContext.getApplicationId
     println("submitting application id" + appId)
     client.submitApplication(appContext)
+
+    /*Some points
+    *  A record of accepted applications is written to persistent storage and recovered in case of RM restart or failure.
+    *
+    *
+    *
+    * */
 
 
   }
